@@ -1,3 +1,6 @@
-node_modules
-# Keep environment variables out of version control
+# Dependency directories
+node_modules/
+# dotenv environment variable files
 .env
+.env.development
+.env.testing
