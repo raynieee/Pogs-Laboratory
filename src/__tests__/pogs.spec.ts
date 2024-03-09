@@ -4,7 +4,7 @@ import supertest from 'supertest';
 
 const app = createServer();
 
-describe("pog", () => {
+describe("test GET method", () => {
   describe("show all pogs", () => {
     describe("given a couple of pogs exists in the database", () => {
       beforeEach(async () => {
@@ -14,13 +14,13 @@ describe("pog", () => {
             {
               name: "Eeyore", 
               tickerSymbol: "PGEEAC",
-              price: 5,
+              price: 5.25,
               color: "#7BA1D2"
             },
             {
               name: "Tigger",
               tickerSymbol: "PGTIAD",
-              price: 5,
+              price: 5.25,
               color: "Orange"
             }
           ]
@@ -39,7 +39,22 @@ describe("pog", () => {
 
         // Assessment
         expect(res.statusCode).toBe(200);
-        expect(res.body.length).toBe(2);
+        expect(res.body.pogs).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              name: "Eeyore",
+              tickerSymbol: "PGEEAC",
+              price: "5.25",
+              color: "#7BA1D2",
+            }),
+            expect.objectContaining({
+              name: "Tigger",
+              tickerSymbol: "PGTIAD",
+              price: "5.25",
+              color: "Orange",
+            }),
+          ])
+        );
       });
     });
   });
