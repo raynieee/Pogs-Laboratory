@@ -5,7 +5,7 @@ CREATE TABLE "pogs" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "tickerSymbol" VARCHAR(6) NOT NULL,
-    "price" DOUBLE PRECISION NOT NULL,
+    "price" NUMERIC(19,2) NOT NULL,
     "color" VARCHAR(24) NOT NULL,
 
     CONSTRAINT "pogs_pkey" PRIMARY KEY ("id")

@@ -19,6 +19,6 @@ model pogs {
   updatedAt     DateTime      @updatedAt
   name          String        @unique @db.VarChar(255)
   tickerSymbol  String        @unique @db.VarChar(6)
-  price         Float
+  price         Decimal       @db.Decimal(19,2)
   color         String        @db.VarChar(24)
 }
