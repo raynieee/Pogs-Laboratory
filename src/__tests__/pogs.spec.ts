@@ -59,3 +59,94 @@ describe("test GET method", () => {
     });
   });
 });
+
+describe("test PATCH method", () => {
+  describe("update a pog", () => {
+    let pogId: number;
+
+    beforeEach(async() => {
+      // Setup
+      const newPog = await prisma.pogs.create({
+        data: {
+          name: "Eeyore",
+          tickerSymbol: "PGEEAC",
+          price: 5.25,
+          color: "7BA1D2",
+        }
+      });
+      pogId = newPog.id;
+    });
+
+    afterEach(async() => {
+      // Teardown
+      await prisma.pogs.delete({
+        where: {id:pogId},
+      });
+    });
+
+    it("should update a pog", async() => {
+
+      // Invocation
+      const res = await supertest(app)
+      .patch(`/api/pogs/${pogId}`)
+      .send({
+        name: "Eeyore Updated",
+        tickerSymbol: "PGEEAC",
+        price: 6.25,
+        color: "#7BA1D2"
+      });
+
+      // Assessment
+      expect(res.statusCode).toBe(200);
+      expect(res.body.pog).toEqual(
+        expect.objectContaining({
+          name: "Eeyore Updated",
+          tickerSymbol: "PGEEAC",
+          price: 6.25,
+          color: "#7BA1D2"
+        })
+      );
+    });
+  });
+});
+
+describe("test DELETE method", () => {
+  describe("delete a pog", () => {
+    let pogId: number;
+
+    beforeEach(async() => {
+      // Setup
+      const newPog = await prisma.pogs.create({
+        data: {
+          name: "Eeyore", 
+          tickerSymbol: "PGEEAC",
+          price: 5.25,
+          color: "#7BA1D2"
+        },
+      });
+      pogId = newPog.id;
+    });
+
+    it("should delete a pog", async() => {
+
+      // Invocation
+      const res = await supertest(app).delete(`/api/pogs/${pogId}`);
+
+      // Assessment
+      expect(res.statusCode).toBe(200);
+      expect(res.body.pog).toEqual(
+        expect.objectContaining({
+          name: "Eeyore",
+          tickerSymbol: "PGEEAC",
+          price: 5.25,
+          color: "#7BA1D2"
+        })
+      );
+
+      const deletedPog = await prisma.pogs.findUnique({
+        where: {id: pogId},
+      });
+      expect(deletedPog).toBeNull();
+    });
+  });
+});
