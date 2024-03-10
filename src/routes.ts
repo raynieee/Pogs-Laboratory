@@ -10,6 +10,11 @@ function routes(app: Express) {
   app.post("/api/pogs", async (req: Request, res: Response) => {
     try {
       const { name, tickerSymbol, price, color } = req.body;
+
+      if (price < 0) {
+        return res.status(422).json({ message: "Invalid price."});
+      }
+      
       const newPog = await prisma.pogs.create({
         data: {
           name,
@@ -18,10 +23,6 @@ function routes(app: Express) {
           color,
         },
       });
-
-      if (price < 0) {
-        return res.status(422).json({ message: "Invalid price."});
-      }
 
       res.status(201).json({ message: "Pog successfully added!", pog: newPog });
     } catch (error) {

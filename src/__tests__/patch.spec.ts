@@ -64,6 +64,13 @@ describe("test PATCH method", () => {
       pogId = newPog.id;
     });
 
+    afterEach(async () => {
+      // Teardown
+      await prisma.pogs.delete({
+        where: { id: pogId },
+      });
+    });
+
     it("should update multiple fields of a pog", async() => {
 
       // Invocation
@@ -115,8 +122,8 @@ describe("test PATCH method", () => {
       // Setup
       const newPog = await prisma.pogs.create({
         data: {
-          name: "Eeyore", 
-          tickerSymbol: "PGEEAC",
+          name: "Owl", 
+          tickerSymbol: "PGOWAE",
           price: 5.25,
           color: "#7BA1D2"
         },
@@ -136,8 +143,8 @@ describe("test PATCH method", () => {
       const res = await supertest(app)
         .patch(`/api/pogs/${pogId}`)
         .send({
-          name: "Eeyore",
-          price: -5.25, // Invalid price
+          name: "Owl",
+          price: -5.25
         });
 
         // Assessment
