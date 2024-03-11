@@ -45,8 +45,8 @@ describe("test POST method", () => {
 
       // Assessment
       expect(invalidPog.statusCode).toBe(422);
-      expect(invalidPog.body).toHaveProperty("message");
-      expect(invalidPog.body.message).toBe("Invalid price.");
+      expect(invalidPog.body).toHaveProperty("error");
+      expect(invalidPog.body.error).toBe("Invalid price.");
     });
   });
 });

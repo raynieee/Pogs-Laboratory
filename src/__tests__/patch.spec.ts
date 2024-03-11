@@ -125,6 +125,7 @@ describe("test PATCH method", () => {
       // Assessment
       expect(res.statusCode).toBe(422);
       expect(res.body).toHaveProperty("error");
+      expect(res.body.error).toBe("Invalid price.");
     });
   });
 });

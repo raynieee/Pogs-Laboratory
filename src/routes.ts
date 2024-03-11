@@ -12,7 +12,7 @@ function routes(app: Express) {
       const { name, tickerSymbol, price, color } = req.body;
 
       if (price < 0) {
-        return res.status(422).json({ message: "Invalid price."});
+        return res.status(422).json({ error: "Invalid price."});
       }
       
       const newPog = await prisma.pogs.create({
@@ -67,7 +67,7 @@ function routes(app: Express) {
       });
 
       if (price < 0) {
-        return res.status(422).json({ error: "Price must be a positive number." });
+        return res.status(422).json({ error: "Invalid price." });
       }
 
       if (!existingPog) {
