@@ -1,52 +1,52 @@
 import { prisma } from "../routes";
 import createServer from "../utils/server";
-import supertest from 'supertest';
+import supertest from "supertest";
 
 const app = createServer();
 
 describe("test POST method", () => {
-  describe("create a new pog", () => {
+  afterEach(async () => {
+    //Teardown
+    await prisma.pogs.deleteMany();
+  });
 
+  describe("create a new pog", () => {
     it("should create a pog", async () => {
       // Invocation
-      const res = await supertest(app)
-        .post("/api/pogs")
-        .send({
-          name: "Rabbit",
-          tickerSymbol: "PGRAAH",
-          price: 5.25,
-          color: "Yellow"
-        });
+      const createPog = await supertest(app).post("/api/pogs").send({
+        name: "Rabbit",
+        tickerSymbol: "PGRAAH",
+        price: 5.25,
+        color: "Yellow",
+      });
 
       // Assessment
-      expect(res.status).toBe(201);
-      expect(res.body.pog).toEqual(
+      expect(createPog.status).toBe(201);
+      expect(createPog.body.pog).toEqual(
         expect.objectContaining({
           name: "Rabbit",
           tickerSymbol: "PGRAAH",
           price: "5.25",
-          color: "Yellow"
+          color: "Yellow",
         })
       );
     });
   });
 
-  describe("create a new pog", () => {
+  describe("create a new invalid pog", () => {
     it("should return a 422 error because the data is invalid", async () => {
       // Invocation
-      const res = await supertest(app)
-        .post("/api/pogs")
-        .send({
-          name: "Invalid Pog",
-          tickerSymbol: "PGINAP",
-          price: -123, // Invalid price
-          color: "#000000"
-        });
+      const invalidPog = await supertest(app).post("/api/pogs").send({
+        name: "Invalid Pog",
+        tickerSymbol: "PGINAP",
+        price: -123, // Invalid price
+        color: "#000000",
+      });
 
       // Assessment
-      expect(res.statusCode).toBe(422);
-      expect(res.body).toHaveProperty("message");
-      expect(res.body.message).toBe("Invalid price.");
+      expect(invalidPog.statusCode).toBe(422);
+      expect(invalidPog.body).toHaveProperty("message");
+      expect(invalidPog.body.message).toBe("Invalid price.");
     });
   });
 });
