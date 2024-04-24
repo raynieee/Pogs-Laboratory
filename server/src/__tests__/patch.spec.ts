@@ -1,5 +1,5 @@
-import { prisma } from "../routes";
-import createServer from "../utils/server";
+import { prisma } from "../routes/home/pogs";
+import createServer from "../routes/server";
 import supertest from "supertest";
 
 const app = createServer();

@@ -3,10 +3,6 @@ import { PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
 function routes(app: Express) {
-  app.get("/", (req: Request, res: Response) => {
-    res.send("Hello World");
-  });
-
   app.post("/api/pogs", async (req: Request, res: Response) => {
     try {
       const { name, tickerSymbol, price, color } = req.body;

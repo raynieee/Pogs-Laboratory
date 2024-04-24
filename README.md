@@ -45,11 +45,13 @@ npx prisma migrate dev --name init
 
 to apply database migration to your local PostgreSQL database.
 
-## Run the program / test
+## Run the website
 
 ```bash
-yarn dev
+npm run dev
 ```
+
+## Run the test
 
 ```bash
 yarn test
