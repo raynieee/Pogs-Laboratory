@@ -40,18 +40,24 @@ npx prisma generate
 then after,
 
 ```bash
-npx prisma migrate dev --name init
+npx prisma migrate dev
 ```
 
 to apply database migration to your local PostgreSQL database.
 
-## Run the website
+## Run the client side (cd client)
 
 ```bash
 npm run dev
 ```
 
-## Run the test
+## Run server (cd server)
+
+```bash
+npm run dev
+```
+
+## Run jest
 
 ```bash
 yarn test

@@ -2,7 +2,7 @@ import { Express, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
-function routes(app: Express) {
+export default function pogs(app: Express) {
   app.post("/api/pogs", async (req: Request, res: Response) => {
     try {
       const { name, tickerSymbol, price, color } = req.body;
@@ -104,5 +104,3 @@ function routes(app: Express) {
     }
   });
 }
-
-export default routes;
