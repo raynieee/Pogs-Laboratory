@@ -25,6 +25,7 @@ export default function signup(app: Express) {
           lastName,
           position,
           hashedPassword,
+          eWalletAmount: 10000.00,
         },
       });
 

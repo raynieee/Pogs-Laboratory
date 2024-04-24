@@ -3,7 +3,7 @@ import { createServer } from "http";
 
 dotenv.config();
 
-const port = process.env.PORT || 8080;
+const port = process.env.NEXT_PUBLIC_SERVER_URL;
 const app = createServer();
 
 app.listen(port, () => {

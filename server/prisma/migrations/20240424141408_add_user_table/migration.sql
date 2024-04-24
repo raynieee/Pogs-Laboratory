@@ -6,6 +6,7 @@ CREATE TABLE "users" (
     "position" VARCHAR(255) NOT NULL,
     "email" VARCHAR(255) NOT NULL,
     "hashedPassword" VARCHAR(10) NOT NULL,
+    "eWalletAmount" DECIMAL(19,2) NOT NULL DEFAULT 10000.00,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

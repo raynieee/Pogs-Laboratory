@@ -12,10 +12,18 @@ Once created, you may proceed to the next part of this file.
 
 ## Create .env files
 
-Create a .env file in the root of your project directory where the prisma folder is located, and paste this inside it.
+Create a .env file in the root of your project directory where the prisma folder is located, and paste these inside it.
 
 ```bash
 DATABASE_URL="postgresql://username:password@host:port/database_name?options";
+```
+
+```bash
+NEXT_PUBLIC_CLIENT_URL=3000
+``` 
+
+```bash
+NEXT_PUBLIC_SERVER_URL=8080
 ```
 
 Please replace 

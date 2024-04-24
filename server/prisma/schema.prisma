@@ -14,20 +14,24 @@ datasource db {
 }
 
 model pogs {
-  id            Int           @id @default(autoincrement())
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  name          String        @unique @db.VarChar(255)
-  tickerSymbol  String        @unique @db.VarChar(6)
-  price         Decimal       @db.Decimal(19,2)
-  color         String        @db.VarChar(24)
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  name         String   @unique @db.VarChar(255)
+  tickerSymbol String   @unique @db.VarChar(6)
+  price        Decimal  @db.Decimal(19, 2)
+  color        String   @db.VarChar(24)
+  userId       Int?
+  user         users?   @relation(fields: [userId], references: [id])
 }
 
 model users {
-  id              Int         @id @default(autoincrement())
-  firstName       String      @db.VarChar(255)
-  lastName        String      @db.VarChar(255)
-  position        String      @db.VarChar(255)
-  email           String      @unique @db.VarChar(255)
-  hashedPassword  String      @db.VarChar(10)
+  id             Int     @id @default(autoincrement())
+  firstName      String  @db.VarChar(255)
+  lastName       String  @db.VarChar(255)
+  position       String  @db.VarChar(255)
+  email          String  @unique @db.VarChar(255)
+  hashedPassword String  @db.VarChar(10)
+  eWalletAmount  Decimal @default(10000.00) @db.Decimal(19, 2)
+  pogs           pogs[]
 }
