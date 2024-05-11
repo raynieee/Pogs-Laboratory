@@ -21,8 +21,7 @@ model pogs {
   tickerSymbol String   @unique @db.VarChar(6)
   price        Decimal  @db.Decimal(19, 2)
   color        String   @db.VarChar(24)
-  userId       Int?
-  user         users?   @relation(fields: [userId], references: [id])
+  userpogs     userpogs[]
 }
 
 model users {
@@ -33,5 +32,15 @@ model users {
   email          String  @unique @db.VarChar(255)
   hashedPassword String  @db.VarChar(10)
   eWalletAmount  Decimal @default(10000.00) @db.Decimal(19, 2)
-  pogs           pogs[]
+  userpogs       userpogs[]
+}
+
+model userpogs {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  user        users   @relation(fields: [userId], references: [id])
+  pogId       Int
+  pog         pogs    @relation(fields: [pogId], references: [id])
+  quantity    Int    
+  @@unique([userId, pogId])
 }

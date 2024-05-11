@@ -1,4 +1,4 @@
-import { prisma } from "../routes/home/pogs";
+import { prisma } from "../routes/pogs";
 import createServer from "../routes/server";
 import supertest from "supertest";
 

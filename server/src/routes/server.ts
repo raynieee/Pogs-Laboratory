@@ -1,5 +1,5 @@
 import express from "express";
-import routes from "./home/pogs";
+import routes from "./pogs";
 
 function createServer() {
   const app = express();

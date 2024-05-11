@@ -8,7 +8,7 @@ export default function login(app: Express) {
     try {
       const { email, password } = req.body;
 
-      const user = await prisma.user.findUnique({
+      const user = await prisma.users.findUnique({
         where: { email: email },
       });
 
@@ -16,7 +16,7 @@ export default function login(app: Express) {
         return res.status(404).json({ error: "User not found." });
       }
 
-      const ifMatch = await bcrypt.compare(password, user.password) 
+      const ifMatch = await bcrypt.compare(password, user.hashedPassword) 
 
       if (!ifMatch) {
         return res.status(401).json({ error: "Invalid password."});
