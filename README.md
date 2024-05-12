@@ -1,7 +1,7 @@
 ## Install all dependencies
 
 ```bash
-yarn install
+npm install
 ```
 
 ## Setting up local PostgreSQL database
@@ -68,5 +68,5 @@ npm run dev
 ## Run jest
 
 ```bash
-yarn test
+npm test
 ```

@@ -8,7 +8,7 @@ export default function signup(app: Express) {
     try {
       const { email, firstName, lastName, position, password } = req.body;
 
-      const existingUser = await prisma.user.findUnique({
+      const existingUser = await prisma.users.findUnique({
         where: { email: email },
       });
 
@@ -18,7 +18,7 @@ export default function signup(app: Express) {
 
       const hashedPassword = await bcrypt.hash(password, 10);
 
-      const newUser = await prisma.user.create({
+      const newUser = await prisma.users.create({
         data: {
           email,
           firstName,
