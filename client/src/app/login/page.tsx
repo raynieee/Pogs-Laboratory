@@ -1,45 +1,43 @@
 "use client";
 import React, { useState } from "react";
 import validator from "validator";
+import { login } from "@/utils/userLogin";
 import { useRouter } from 'next/navigation';
-import axios from "axios";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const router = useRouter();
+
   const validateEmail = validator.isEmail(email);
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Basic validation
-    if(!validateEmail) {
-      return setErrorMessage("Please enter a valid email address.");
-    }   
+
+    if (!validateEmail) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
     if (password.length < 10) {
       setErrorMessage("Password must be at least 10 characters long.");
       return;
     }
-    // Proceed with login logic here
-    console.log("Login successful:", { email, password });
-    setErrorMessage(""); // Clear error message
 
     try {
-      const response = await axios.post ('/login', {
-        method: 'POST',
-        body:JSON.stringify({email, password}),
-      })
+      const token = await login(email, password); 
 
-      if (response.status !== 200) {
-        setErrorMessage("An error occured during login.")
+      if (token) {
+        console.log("Login successful");
+        setErrorMessage("");
+        router.push('/home'); 
+      } else {
+        setErrorMessage("An error occurred during login.");
       }
-
-      console.log("Login successful:", response.data);
-      setErrorMessage("");
     } catch (error) {
-      console.error('', error);
-      setErrorMessage("");
+      console.error("Error logging in:", error);
+      setErrorMessage("An error occurred during login.");
     }
   };
 
@@ -64,7 +62,9 @@ export default function Login() {
           />
         </div>
         {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-        <button type="submit" className="text-black w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600">Login</button>
+        <button type="submit" className="text-black w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600">
+          Login
+        </button>
       </form>
     </main>
   );

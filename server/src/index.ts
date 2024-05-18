@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { createServer } from "http";
+import createServer from "./routes/server";
 
 dotenv.config();
 
