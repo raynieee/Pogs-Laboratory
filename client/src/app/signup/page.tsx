@@ -50,6 +50,7 @@ export default function Signup() {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            required
           />
           <input
             type="lastName"
@@ -57,11 +58,13 @@ export default function Signup() {
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            required 
           />
           <select
             value={position}
             onChange={(e) => setPosition(e.target.value)}
             className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            required
           >
             <option value="">Select a position</option>
             {positions.map((pos) => (
