@@ -33,6 +33,7 @@ const config: Config = {
       'gray-light': '#d3dce6',
       'white': '#FAF9F6',
       'black': '#000000',
+      'red':'#FF0000',
     },
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],

@@ -9,7 +9,6 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showPogs, setShowPogs] = useState([]);
   
-
   // makita ang tanan nga pogs for sale, ticker marquee, prices of pogs displayed as well as prev price, user wallet displayed, all pogs owned by the user
 
   const showAllPogs = async () => {
