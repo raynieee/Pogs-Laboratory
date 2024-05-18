@@ -7,6 +7,7 @@ CREATE TABLE "pogs" (
     "tickerSymbol" VARCHAR(6) NOT NULL,
     "price" DECIMAL(19,2) NOT NULL,
     "color" VARCHAR(24) NOT NULL,
+    "previousPrice" DECIMAL(19,2) NOT NULL,
 
     CONSTRAINT "pogs_pkey" PRIMARY KEY ("id")
 );

@@ -17,6 +17,7 @@ export default function pogs(app: Express) {
           tickerSymbol,
           price,
           color,
+          previousPrice: 0,
         },
       });
 
@@ -62,13 +63,13 @@ export default function pogs(app: Express) {
         where: { id: Number(id) },
       });
 
-      if (price < 0) {
-        return res.status(422).json({ error: "Invalid price." });
-      }
-
       if (!existingPog) {
         return res.status(404).json({ error: "Pog of that id cannot be found." });
       };
+
+      if (typeof price !== "number" || price < 0) {
+        return res.status(422).json({ error: "Invalid price." });
+      }
 
       const updatedPog = await prisma.pogs.update({
         where: { id: Number(id) },
@@ -97,7 +98,7 @@ export default function pogs(app: Express) {
         where: { id: Number(existingPog.id) },
       });
 
-      res.status(204).json({ message: "Pog successfully updated.", pog: deletedPog });
+      res.status(204).json({ message: "Pog successfully deleted.", pog: deletedPog });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Error deleting pog." });
