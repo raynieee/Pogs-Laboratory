@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import validator from "validator"
-import { useRouter } from 'next/navigation'
-import axios from 'axios'
+import validator from "validator";
+import { useRouter } from 'next/navigation';
+import { signup } from "@/utils/createUser";
 
 export default function Signup() {
   const [firstName, setFirstName] = useState('');
@@ -12,7 +12,6 @@ export default function Signup() {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Use useRouter from next/navigation
   const router = useRouter();
 
   const validateEmail = validator.isEmail(email);
@@ -25,22 +24,12 @@ export default function Signup() {
     if (password.length < 10) {
       return setErrorMessage('Password must be at least 10 characters long.');
     }
-    try {
-      const response = await axios.post('http://localhost:8080/signup', {
-        firstName,
-        lastName,
-        position,
-        email,
-        password,
-      });
+    setErrorMessage("");
 
-      if (response.status === 201) {
-        console.log('Registration successful:', response.data);
-        // Use router.push from next/navigation
-        router.push('/login');
-      } else {
-        setErrorMessage('An error occurred during signup.');
-      }
+    try {
+      await signup(email, firstName, lastName, position, password); 
+      console.log('Registration successful');
+      router.push('/login'); 
     } catch (error) {
       console.error('There has been a problem with your fetch operation:', error);
       setErrorMessage('An error occurred during registration.');
