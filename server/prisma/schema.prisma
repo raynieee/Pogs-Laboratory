@@ -31,7 +31,7 @@ model users {
   lastName       String  @db.VarChar(255)
   position       String  @db.VarChar(255)
   email          String  @unique @db.VarChar(255)
-  hashedPassword String  @db.VarChar(10)
+  hashedPassword String  @db.VarChar(60)
   eWalletAmount  Decimal @default(10000.00) @db.Decimal(19, 2)
   userpogs       userpogs[]
 }
