@@ -22,9 +22,7 @@ export default function login(app: Express) {
         return res.status(401).json({ error: "Invalid password."});
       }
 
-      //implement token logic here
-
-      res.status(200).json({ message: "Login successful.", position: user.position })
+      res.status(200).json({ message: "Login successful.", position: user.position, id: user.id })
     } catch (error) {
       res.status(500).json({ error: "Server error." })
     }

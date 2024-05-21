@@ -9,7 +9,7 @@ export async function login(email: string, password: string) {
 
     if (response.status === 200) {
       console.log(response.data.message);
-      return response.data.token;
+      return response.data;
     } else {
       throw new Error(`HTTP error Status: ${response.status}`);
     }

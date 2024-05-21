@@ -10,7 +10,9 @@ export async function fetchAllPogs() {
 
     const pogs = response.data.pogs;
     console.log("Successfully fetched pogs:", pogs); 
+    return pogs;
   } catch (error) {
     console.error("Error fetching pogs:", error);
+    return error;
   }
 }

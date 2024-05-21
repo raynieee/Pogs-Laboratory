@@ -21,9 +21,18 @@ export default function priceChange(app: Express) {
       });
   
       await Promise.all(updates);
+  
+      res.status(200).json({ message: "Pog prices randomized successfully.", updates });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Error randomizing pog prices." });
+    }
+  });
 
-      const updatedPogs = await prisma.pogs.findMany();
-      const pogUpdates = updatedPogs.map(updatedPog => {
+  app.get("/percentages", async (req: Request, res: Response) => {
+    try {
+      const pogs = await prisma.pogs.findMany();
+      pogs.map(updatedPog => {
         let color = "red" || "green" || "black"
         let setPercentage: string;
         let price = updatedPog.price.toNumber();
@@ -39,7 +48,7 @@ export default function priceChange(app: Express) {
             setPercentage = `+${percentage.toFixed(2)}%`;
             color = "green";
           } else if (percentage < 0) {
-            setPercentage = `-${percentage.toFixed(2)}%`;
+            setPercentage = `${percentage.toFixed(2)}%`;
             color = "red";
           } else {
             setPercentage = "0.00%"; //if no change in price
@@ -54,11 +63,8 @@ export default function priceChange(app: Express) {
           percentage: setPercentage,
         };
       });
-  
-      res.status(200).json({ message: "Pog prices randomized successfully.", updates: pogUpdates });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: "Error randomizing pog prices." });
+    } catch {
+      res.status(500).json({ error: "Error getting pog percentages." });
     }
-  });
+  })
 }

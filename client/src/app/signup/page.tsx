@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import validator from "validator";
+import axios from "axios";
 import { useRouter } from 'next/navigation';
 import { signup } from "@/utils/createUser";
 
@@ -14,21 +15,39 @@ export default function Signup() {
 
   const router = useRouter();
 
-  const validateEmail = validator.isEmail(email);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateEmail) {
+    
+    if (!validator.isEmail(email)) {
       return setErrorMessage('Please enter a valid email address.');
     }
+
     if (password.length < 10) {
       return setErrorMessage('Password must be at least 10 characters long.');
     }
+
+    if (!firstName.trim() || !lastName.trim() || !position.trim()) {
+      return setErrorMessage('All fields are required.');
+    }
+
     setErrorMessage("");
 
     try {
-      await signup(email, firstName, lastName, position, password); 
-      console.log('Registration successful');
+      const formData = new FormData();
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);
+      formData.append('position', position);
+      formData.append('email', email);
+      formData.append('password', password);
+
+      const response = await axios.post('http://localhost:8080/signup', {
+        email,
+        firstName,
+        lastName,
+        position,
+        password,
+      });      
+      console.log('response:', response);
       router.push('/login'); 
     } catch (error) {
       console.error('There has been a problem with your fetch operation:', error);
@@ -44,47 +63,44 @@ export default function Signup() {
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
           <h2 className="text-2xl text-black font-semibold mb-6">Sign Up</h2>
           <div className="space-y-4">
-          <input
-            type="firstName"
-            placeholder="First Name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            required
-          />
-          <input
-            type="lastName"
-            placeholder="Last Name"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            required 
-          />
-          <select
-            value={position}
-            onChange={(e) => setPosition(e.target.value)}
-            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            required
-          >
-            <option value="">Select a position</option>
-            {positions.map((pos) => (
-              <option key={pos} value={pos}>{pos}</option>
-            ))}
-          </select>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-          />
+            <input
+              type="text"
+              placeholder="First Name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+            <input
+              type="text"
+              placeholder="Last Name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+            <select
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+              className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            >
+              <option value="">Select a position</option>
+              {positions.map((pos) => (
+                <option key={pos} value={pos}>{pos}</option>
+              ))}
+            </select>
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            />
           </div>
           {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
           <button type="submit" className="text-black w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600">Sign Up</button>
