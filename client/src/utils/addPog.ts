@@ -15,7 +15,9 @@ export async function addPog(name: string, price: number, tickerSymbol: string, 
 
     const data = response.data;
     console.log(data);
+    return data;
   } catch (error) {
     console.error("Error adding pog:", error);
+    return error;
   }
 }

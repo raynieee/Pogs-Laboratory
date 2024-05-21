@@ -26,15 +26,11 @@ export default function Login() {
     }
 
     try {
-      const token = await login(email, password); 
-
-      if (token) {
-        console.log("Login successful");
-        setErrorMessage("");
-        router.push('/home'); 
-      } else {
-        setErrorMessage("An error occurred during login.");
-      }
+      const response = await login(email, password); 
+      localStorage.setItem("userId", response.id)
+      console.log("Login successful.");
+      setErrorMessage("");
+      router.push('/home'); 
     } catch (error) {
       console.error("Error logging in:", error);
       setErrorMessage("An error occurred during login.");

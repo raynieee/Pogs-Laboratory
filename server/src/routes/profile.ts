@@ -18,6 +18,7 @@ export default function profile(app: Express) {
       const userDetails = {
         name: `${user.firstName} ${user.lastName}`,
         email: user.email,
+        eWallet: user.eWalletAmount
       };
 
       res.status(200).json(userDetails);

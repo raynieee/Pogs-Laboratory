@@ -40,20 +40,18 @@ export default function Signup() {
       formData.append('email', email);
       formData.append('password', password);
 
-      
-
-      const response = await axios.post('/signup', {
+      const response = await axios.post('http://localhost:8080/signup', {
         email,
         firstName,
         lastName,
         position,
         password,
       });      
-      console.log('Registration successful');
+      console.log('response:', response);
       router.push('/login'); 
     } catch (error) {
       console.error('There has been a problem with your fetch operation:', error);
-      setErrorMessage(error.response?.data?.message || 'An error occurred during registration.');
+      setErrorMessage('An error occurred during registration.');
     }
   };
 
