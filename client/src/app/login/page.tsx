@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import validator from "validator";
 import { login } from "@/utils/userLogin";
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -27,10 +28,18 @@ export default function Login() {
 
     try {
       const response = await login(email, password); 
-      localStorage.setItem("userId", response.id)
+      localStorage.setItem("userId", response.id);
+      localStorage.setItem("position", response.position);
       console.log("Login successful.");
       setErrorMessage("");
-      router.push('/home'); 
+      if (response.position === "User") {
+        router.push('/home'); 
+      } else if (response.position === "Admin") {
+        router.push('/admin');
+      } else {
+        alert('Error logging in.')
+        router.push('/login');
+      }
     } catch (error) {
       console.error("Error logging in:", error);
       setErrorMessage("An error occurred during login.");
@@ -58,9 +67,12 @@ export default function Login() {
           />
         </div>
         {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-        <button type="submit" className="text-black w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600">
+        <button type="submit" className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600 active:bg-blue-700">
           Login
         </button>
+        <Link href="/signup" className="text-blue-600 py-4">
+          <button className="text-blue-500 py-1 cursor-pointer hover:text-blue-800">Don't have an account yet?</button>
+        </Link>
       </form>
     </main>
   );
