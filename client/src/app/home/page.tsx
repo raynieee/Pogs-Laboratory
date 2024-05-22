@@ -62,7 +62,7 @@ export default function Home() {
 
           return {
             id: pog.id,
-            ticker_symbol: pog.tickerSymbol,
+            tickerSymbol: pog.tickerSymbol,
             color: color,
             percentage: setPercentage,
           };
@@ -127,14 +127,14 @@ export default function Home() {
       </div>
 
       <div className="bg-white border border-gray-300 rounded-xl p-8">
-        <h2 className="text-2xl text-black font-semibold mb-6">Home Page</h2>
+        <h2 className="text-2xl text-black font-semibold mb-6">HOME PAGE</h2>
         <p className="text-black">Welcome {name}!</p>
         <p className="text-black">E-Wallet Amount: {eWallet}</p>
       </div>
 
       {/* Pogs Card Container */}
       <div className="mt-8">
-        <h3 className="text-xl font-medium mb-2">Pogs Showcase</h3>
+        <h3 className="text-xl font-medium mb-2 text-white">POGS SHOWCASE</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
           {showPogs.map((pog) => (
             <div
@@ -150,8 +150,8 @@ export default function Home() {
               <div className="space-y-2">
                 <h4 className="text-lg font-bold">{pog.name}</h4>
                 <p className="text-sm">${pog.price}</p>
-                <button onClick={() => handleBuyPogs(pog.id)}>Buy Pog</button>
-                <button onClick={() => handleSellPogs(pog.id)}>Sell Pog</button>
+                <button className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600" onClick={() => handleBuyPogs(pog.id)}>Buy Pog</button>
+                <button className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600" onClick={() => handleSellPogs(pog.id)}>Sell Pog</button>
               </div>
             </div>
           ))}

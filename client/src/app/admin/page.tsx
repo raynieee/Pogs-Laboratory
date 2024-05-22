@@ -112,6 +112,7 @@ export default function Admin() {
   const handleDelete = async (id: number) => {
     await deletePog(id);
     setTableData(tableData.filter((_, index) => index !== id));
+    alert('Pog deleted successfully.')
   };
 
   const handleRandomPriceChange = async () => {
