@@ -5,6 +5,7 @@ import { addPog } from "@/utils/addPog";
 import { deletePog } from "@/utils/deletePog";
 import { fetchAllPogs } from "@/utils/getPogs";
 import { updatePog } from "@/utils/updatePog";
+import { useRouter } from "next/navigation";
 
 interface Pog {
   id: number;
@@ -25,13 +26,22 @@ export default function Admin() {
   const [showForm, setShowForm] = useState(false); // State to control form visibility
   const [showEditForm, setShowEditForm] = useState(false); // State to control edit form visibility
   const [tableData, setTableData] = useState<Pog[]>([]); // State to hold table data
+  const userPosition = localStorage.getItem("position");
 
   const fetchPogs = async () => {
     const response = await fetchAllPogs();
     setTableData(response);
   };
 
+  const router = useRouter();
+
   useEffect(() => {
+    const isAdmin = () => {
+      if (userPosition !== "Admin") {
+        router.push("/home");
+      }
+    };
+    isAdmin();
     fetchPogs();
   }, []);
 
@@ -55,9 +65,6 @@ export default function Admin() {
       );
 
       console.log("response", response);
-
-      // Update the table data state with the new entry
-      // setTableData([...tableData, response.data.pog]);
 
       // Clear the form after submission
       setPogName("");
@@ -92,11 +99,6 @@ export default function Admin() {
         newData.color
       );
 
-      console.log("response", response);
-
-      // Update the table data state with the new entry
-      // setTableData([...tableData, response.data.pog]);
-
       // Clear the form after submission
       setPogName("");
       setPogTickerSymbol("");
@@ -112,7 +114,7 @@ export default function Admin() {
   const handleDelete = async (id: number) => {
     await deletePog(id);
     setTableData(tableData.filter((_, index) => index !== id));
-    alert('Pog deleted successfully.')
+    alert("Pog deleted successfully.");
   };
 
   const handleRandomPriceChange = async () => {
@@ -125,18 +127,18 @@ export default function Admin() {
   };
 
   return (
-    <main className="flex min-h-screen p-24 gap-4">
-      <div className="w-1/2">
+    <main className="flex min-h-screen p-24 gap-5">
+      <div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-2 px-3 rounded"
         >
           Add Pog
         </button>
         {showForm && (
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mt-4"
+            className="bg-white p-8 rounded-lg shadow-md w-full max-w-md m-2"
           >
             <h2 className="text-2xl text-black font-semibold mb-6">Add pog</h2>
             <div className="space-y-4">
@@ -171,14 +173,28 @@ export default function Admin() {
             </div>
             <button
               type="submit"
-              className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
+              className="text-white font-bold w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
             >
               Submit
             </button>
           </form>
         )}
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-2 px-4 rounded"
+          onClick={() => handleRandomPriceChange()}
+        >
+          Randomize Prices
+        </button>
+        <div>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-2 px-4 rounded"
+            onClick={() => router.push('/home')}
+          >
+            Home
+          </button>
+        </div>
       </div>
-      <div className="w-1/2">
+      <div className="w-full">
         <table className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mt-4">
           <thead>
             <tr>
@@ -202,12 +218,12 @@ export default function Admin() {
                       setShowEditForm(!showEditForm);
                       setPogId(data.id);
                     }}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
                   >
                     Edit Pog
                   </button>
 
-                  {showEditForm && (
+                  {pogId === data.id && showEditForm && (
                     <form
                       onSubmit={handleEdit}
                       className="bg-white p-8 rounded-lg shadow-md w-full max-w-md mt-4"
@@ -247,22 +263,24 @@ export default function Admin() {
                       </div>
                       <button
                         type="submit"
-                        className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
+                        className="font-bold text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
                       >
-                        Submit
+                        Save Changes
                       </button>
                     </form>
                   )}
                   <br />
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleDelete(data.id)}>Delete</button>
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-1 px-5 rounded"
+                    onClick={() => handleDelete(data.id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => handleRandomPriceChange()}>
-          Randomize Prices
-        </button>
       </div>
     </main>
   );

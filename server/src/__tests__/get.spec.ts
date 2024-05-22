@@ -21,12 +21,14 @@ describe("test GET method", () => {
               tickerSymbol: "PGWPAB",
               price: 5.25,
               color: "#fff19c",
+              previousPrice: 0.00
             },
             {
               name: "Piglet",
               tickerSymbol: "PGPIAC",
               price: 5.25,
               color: "Pink",
+              previousPrice: 0.00
             },
           ],
         });
@@ -73,6 +75,7 @@ describe("show one pog", () => {
           tickerSymbol: "PGKAAD",
           price: 5.25,
           color: "Brown",
+          previousPrice: 0.00
         },
       });
       pogId1 = newPog1.id;
@@ -83,6 +86,7 @@ describe("show one pog", () => {
           tickerSymbol: "PGROAE",
           price: 5.25,
           color: "Blue",
+          previousPrice: 0.00
         },
       });
       pogId2 = newPog2.id;

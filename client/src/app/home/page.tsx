@@ -4,6 +4,7 @@ import { fetchAllPogs } from "@/utils/getPogs";
 import { getUserProfile } from "@/utils/userDetails";
 import { buyPog } from "@/utils/buyPog";
 import { sellPog } from "@/utils/sellPog";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   interface PogUpdate {
@@ -28,9 +29,15 @@ export default function Home() {
   const [showPogs, setShowPogs] = useState<Pog[]>([]);
   const [pogUpdates, setPogUpdates] = useState<PogUpdate[]>([]);
 
+  const router = useRouter();
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       setUserId(window.localStorage.getItem("userId"));
+    }
+
+    if (userId === null) {
+      router.push('/login');
     }
 
     async function fetchData() {
@@ -38,7 +45,7 @@ export default function Home() {
 
       try {
         const userProfile = await getUserProfile(Number(userId));
-        const getPogs = await fetchAllPogs(); 
+        const getPogs = await fetchAllPogs();
 
         const pogsWithPercentages = getPogs.map((pog: Pog) => {
           let color = "black";
@@ -46,7 +53,8 @@ export default function Home() {
           const price = pog.price;
           const previousPrice = pog.previousPrice;
 
-          if (previousPrice === 0) { // New pog
+          if (previousPrice === 0) {
+            // New pog
             setPercentage = "0.00%";
           } else {
             const percentage = ((price - previousPrice) / previousPrice) * 100;
@@ -82,20 +90,25 @@ export default function Home() {
   const handleBuyPogs = async (pogId: number) => {
     try {
       await buyPog(pogId, Number(userId), 1);
-      alert("Pog bought successfully.")
+      alert("Pog bought successfully.");
     } catch {
-      console.error("Error")
+      console.error("Error");
     }
-  }
+  };
 
   const handleSellPogs = async (pogId: number) => {
     try {
       await sellPog(pogId, Number(userId), 1);
-      alert("Pog sold successfully.")
+      alert("Pog sold successfully.");
     } catch {
-      console.error("Error")
+      console.error("Error");
     }
-  }
+  };
+
+  const handleLogout = async () => {
+    localStorage.clear();
+    router.push("/login");
+  };
 
   return (
     <main className="flex min-h-screen flex-col justify-center p-24">
@@ -118,7 +131,10 @@ export default function Home() {
             scrollamount="5"
           >
             {pogUpdates.map((update) => (
-              <span key={update.id} style={{ color: update.color, marginRight: "1rem" }}>
+              <span
+                key={update.id}
+                style={{ color: update.color, marginRight: "1rem" }}
+              >
                 {update.tickerSymbol}: {update.percentage}
               </span>
             ))}
@@ -130,6 +146,12 @@ export default function Home() {
         <h2 className="text-2xl text-black font-semibold mb-6">HOME PAGE</h2>
         <p className="text-black">Welcome {name}!</p>
         <p className="text-black">E-Wallet Amount: {eWallet}</p>
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold mt-1 py-2 px-4 rounded"
+          onClick={() => handleLogout()}
+        >
+          Logout
+        </button>
       </div>
 
       {/* Pogs Card Container */}
@@ -150,8 +172,18 @@ export default function Home() {
               <div className="space-y-2">
                 <h4 className="text-lg font-bold">{pog.name}</h4>
                 <p className="text-sm">${pog.price}</p>
-                <button className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600" onClick={() => handleBuyPogs(pog.id)}>Buy Pog</button>
-                <button className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600" onClick={() => handleSellPogs(pog.id)}>Sell Pog</button>
+                <button
+                  className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
+                  onClick={() => handleBuyPogs(pog.id)}
+                >
+                  Buy Pog
+                </button>
+                <button
+                  className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
+                  onClick={() => handleSellPogs(pog.id)}
+                >
+                  Sell Pog
+                </button>
               </div>
             </div>
           ))}

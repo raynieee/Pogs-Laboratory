@@ -21,6 +21,7 @@ describe("test DELETE method", () => {
           tickerSymbol: "PGCRAA",
           price: 5.25,
           color: "Beige",
+          previousPrice: 0.00
         },
       });
       pogId = newPog.id;

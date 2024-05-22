@@ -21,6 +21,7 @@ describe("test PATCH method", () => {
           tickerSymbol: "PGTIAF",
           price: 5.25,
           color: "Red",
+          previousPrice: 0.00
         },
       });
       pogId = newPog.id;
@@ -30,6 +31,7 @@ describe("test PATCH method", () => {
       // Invocation
       const res = await supertest(app).patch(`/api/pogs/${pogId}`).send({
         color: "Orange",
+        price: 5.25,
       });
 
       // Assessment
@@ -41,6 +43,7 @@ describe("test PATCH method", () => {
           tickerSymbol: "PGTIAF",
           price: "5.25",
           color: "Orange",
+          previousPrice: "0",
           createdAt: expect.any(String),
           updatedAt: expect.any(String),
         })
@@ -59,6 +62,7 @@ describe("test PATCH method", () => {
           tickerSymbol: "PGEEAG",
           price: 7.25,
           color: "#005681",
+          previousPrice: 0.00
         },
       });
       pogId = newPog.id;
@@ -110,6 +114,7 @@ describe("test PATCH method", () => {
           tickerSymbol: "PGOWAE",
           price: 5.25,
           color: "#7BA1D2",
+          previousPrice: 0.00
         },
       });
       pogId = newPog.id;
