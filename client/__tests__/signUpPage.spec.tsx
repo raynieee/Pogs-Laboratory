@@ -35,7 +35,7 @@ describe('Signup Component', () => {
     jest.clearAllMocks();
   });
 
-  test('renders signup form correctly', () => {
+  it('should render signup form correctly', () => {
     const { getByPlaceholderText, getByText } = render(<Signup />);
     expect(getByPlaceholderText('First Name')).toBeInTheDocument();
     expect(getByPlaceholderText('Last Name')).toBeInTheDocument();
@@ -43,7 +43,7 @@ describe('Signup Component', () => {
     expect(getByPlaceholderText('Password')).toBeInTheDocument();
   });
 
-  test('displays error message when email is invalid', async () => {
+  it('should display error message when email is invalid', async () => {
     const { getByPlaceholderText, getByText } = render(<Signup />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
@@ -52,7 +52,7 @@ describe('Signup Component', () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
-  test('displays error message when password is too short', async () => {
+  it('should display error message when password is too short', async () => {
     const { getByPlaceholderText, getByText } = render(<Signup />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -64,7 +64,7 @@ describe('Signup Component', () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
-  test('submits form and redirects to login page on success', async () => {
+  it('should submit form and redirect to login page on success', async () => {
     const { getByPlaceholderText, getByText, getByRole } = render(<Signup />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -88,7 +88,7 @@ describe('Signup Component', () => {
     await waitFor(() => expect(router.push).toHaveBeenCalledWith('/login'));
   });
 
-  test('handles signup failure', async () => {
+  it('should handle signup failure', async () => {
     const { getByPlaceholderText, getByText, getByRole } = render(<Signup />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });

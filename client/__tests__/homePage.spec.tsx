@@ -60,7 +60,7 @@ describe('Home Page', () => {
     jest.clearAllMocks();
   });
 
-  test('renders the home page with user profile and pogs', async () => {
+  it('should render the home page with user profile and pogs', async () => {
     render(<Home />);
 
     await waitFor(() => {
@@ -70,7 +70,7 @@ describe('Home Page', () => {
     });
   });
 
-  test('handles buying a pog', async () => {
+  it('should handle buying a pog', async () => {
     render(<Home />);
 
     const buyButton = await screen.findByRole('button', { name: /Buy Pog/i });
@@ -82,7 +82,7 @@ describe('Home Page', () => {
     });
   });
 
-  test('handles selling a pog', async () => {
+  it('should handle selling a pog', async () => {
     render(<Home />);
 
     const sellButton = await screen.findByRole('button', { name: /Sell Pog/i });

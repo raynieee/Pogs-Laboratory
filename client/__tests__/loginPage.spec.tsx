@@ -46,13 +46,13 @@ describe('Login Component', () => {
     jest.clearAllMocks(); // Clear all mocks after each test
   });
 
-  test('renders login form correctly', () => {
+  it('should render login form correctly', () => {
     const { getByPlaceholderText, getByText } = render(<Login />);
     expect(getByPlaceholderText('Email')).toBeInTheDocument();
     expect(getByPlaceholderText('Password')).toBeInTheDocument();
   });
 
-  test('displays error message when email is invalid', async () => {
+  it('should display error message when email is invalid', async () => {
     const { getByPlaceholderText, getByText } = render(<Login />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
@@ -61,7 +61,7 @@ describe('Login Component', () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
-  test('displays error message when password is too short', async () => {
+  it('should display error message when password is too short', async () => {
     const { getByPlaceholderText, getByText } = render(<Login />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -73,7 +73,7 @@ describe('Login Component', () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
-  test('submits form and redirects to home page on success', async () => {
+  it('should submit form and redirect to home page on success', async () => {
     const { getByPlaceholderText, getByRole } = render(<Login />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -87,7 +87,7 @@ describe('Login Component', () => {
     await waitFor(() => expect(router.push).toHaveBeenCalledWith('/home'));
   });
 
-  test('handles login failure', async () => {
+  it('should handle login failure', async () => {
     const { getByPlaceholderText, getByText, getByRole} = render(<Login />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });

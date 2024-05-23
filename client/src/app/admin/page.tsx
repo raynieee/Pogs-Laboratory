@@ -64,8 +64,6 @@ export default function Admin() {
         newData.color
       );
 
-      console.log("response", response);
-
       // Clear the form after submission
       setPogName("");
       setPogTickerSymbol("");
@@ -74,7 +72,7 @@ export default function Admin() {
       setShowForm(false); // Hide the form after submission
       alert("Added pog successfully.");
     } catch (error) {
-      console.error(error);
+      console.log("Error adding pog.");
     }
   };
 
@@ -107,15 +105,20 @@ export default function Admin() {
       setShowForm(false); // Hide the form after submission
       alert("Edited pog successfully.");
     } catch (error) {
-      console.error(error);
+      console.log("Error updating pog:");
     }
   };
 
   // Function to handle deletion of a row
   const handleDelete = async (id: number) => {
-    await deletePog(id);
-    setTableData(tableData.filter((_, index) => index !== id));
-    alert("Pog deleted successfully.");
+    try {
+      await deletePog(id);
+      const updatedTableData = tableData.filter((pog) => pog.id !== id);
+      setTableData(updatedTableData);
+      alert("Pog deleted successfully.");
+    } catch (error) {
+      console.log("Error deleting pog:");
+    }
   };
 
   const handleRandomPriceChange = async () => {
@@ -123,7 +126,7 @@ export default function Admin() {
       await triggerPriceRandomization();
       alert(`Pog prices randomized successfully.`);
     } catch {
-      console.error("Error");
+      console.log("Error randomizing prices.");
     }
   };
 
