@@ -21,27 +21,34 @@ interface UserProfile {
   eWallet: string;
 }
 
-// Mock implementations with the correct return types
-const mockFetchAllPogs = jest.fn(async () => Promise.resolve([{ id: 1, name: 'Pog1', tickerSymbol: 'POG1', price: 10, previousPrice: 9, color: 'blue' }]));
-const mockGetUserProfile = jest.fn(async () => Promise.resolve({ name: 'John Doe', eWallet: '$1000' }));
-const mockBuyPog = jest.fn(async (id: number, userId: number, sharesToBuy: number) => {});
-const mockSellPog = jest.fn(async (id: number, userId: number, sharesToSell: number) => {});
+window.alert = jest.fn();
 
-// Mock modules
-jest.mock('@/utils/getPogs', () => ({
-  fetchAllPogs: mockFetchAllPogs,
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn().mockReturnValue({
+    push: jest.fn(),
+  }),
 }));
 
 jest.mock('@/utils/userDetails', () => ({
-  getUserProfile: mockGetUserProfile,
+  ...jest.requireActual('@/utils/userDetails'),
+  getUserProfile: jest.fn(() => Promise.resolve({ name: "John Doe", eWallet: "$1000" }))
+}));
+
+jest.mock('@/utils/getPogs', () => ({
+  ...jest.requireActual('@/utils/getPogs'),
+  fetchAllPogs: jest.fn(() => Promise.resolve([
+    { id: 1, name: 'Pog1', tickerSymbol: 'POG1', price: 10, previousPrice: 9, color: 'blue' }
+  ]))
 }));
 
 jest.mock('@/utils/buyPog', () => ({
-  buyPog: mockBuyPog,
+  ...jest.requireActual('@/utils/buyPog'),
+    buyPog: jest.fn(async (id: number, userId: number, sharesToBuy: number) => {})
 }));
 
 jest.mock('@/utils/sellPog', () => ({
-  sellPog: mockSellPog,
+  ...jest.requireActual('@/utils/sellPog'),
+    sellPog: jest.fn(async (id: number, userId: number, sharesToSell: number) => {})
 }));
 
 describe('Home Page', () => {
@@ -70,7 +77,7 @@ describe('Home Page', () => {
     fireEvent.click(buyButton);
 
     await waitFor(() => {
-      expect(mockBuyPog).toHaveBeenCalledWith(1, 123, 1);
+      expect(buyPog).toHaveBeenCalledWith(1, 123, 1);
       expect(alert).toHaveBeenCalledWith('Pog bought successfully.');
     });
   });
@@ -82,7 +89,7 @@ describe('Home Page', () => {
     fireEvent.click(sellButton);
 
     await waitFor(() => {
-      expect(mockSellPog).toHaveBeenCalledWith(1, 123, 1);
+      expect(sellPog).toHaveBeenCalledWith(1, 123, 1);
       expect(alert).toHaveBeenCalledWith('Pog sold successfully.');
     });
   });

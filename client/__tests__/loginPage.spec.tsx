@@ -3,6 +3,7 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import Login from '@/app/login/page';
 import { login } from '@/utils/userLogin';
+import '@testing-library/jest-dom';
 
 // Mock the login function
 jest.mock('@/utils/userLogin', () => ({
@@ -73,28 +74,28 @@ describe('Login Component', () => {
   });
 
   test('submits form and redirects to home page on success', async () => {
-    const { getByPlaceholderText, getByText } = render(<Login />);
+    const { getByPlaceholderText, getByRole } = render(<Login />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
 
     const passwordInput = getByPlaceholderText('Password');
     fireEvent.change(passwordInput, { target: { value: 'password123456789' } });
 
-    const submitButton = getByText('Login');
+    const submitButton = getByRole('loginButton');
     fireEvent.click(submitButton);
 
     await waitFor(() => expect(router.push).toHaveBeenCalledWith('/home'));
   });
 
   test('handles login failure', async () => {
-    const { getByPlaceholderText, getByText } = render(<Login />);
+    const { getByPlaceholderText, getByText, getByRole} = render(<Login />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
 
     const passwordInput = getByPlaceholderText('Password');
     fireEvent.change(passwordInput, { target: { value: 'wrongpassword' } });
 
-    const submitButton = getByText('Login');
+    const submitButton = getByRole('loginButton');
     fireEvent.click(submitButton);
 
     await waitFor(() => expect(login).toHaveBeenCalled());

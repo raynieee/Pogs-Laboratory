@@ -36,10 +36,6 @@ export default function Home() {
       setUserId(window.localStorage.getItem("userId"));
     }
 
-    if (userId === null) {
-      router.push('/login');
-    }
-
     async function fetchData() {
       if (!userId) return;
 

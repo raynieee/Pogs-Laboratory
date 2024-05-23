@@ -8,6 +8,12 @@ import '@testing-library/jest-dom';
 
 window.alert = jest.fn();
 
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn().mockReturnValue({
+    push: jest.fn(),
+  }),
+}));
+
 // Mock the entire module and restore the original implementations of the functions you want to keep
 jest.mock('@/utils/addPog', () => {
   const originalModule = jest.requireActual('@/utils/addPog');
@@ -50,7 +56,7 @@ describe('Admin', () => {
     jest.clearAllMocks();
   });
 
-  test('adds a new pog', async () => {
+  it('should add a new pog', async () => {
     const mockAddPog = jest.fn((name, price, tickerSymbol, color) => Promise.resolve({ id: 1, name, tickerSymbol, price, color }));
     (addPog as jest.MockedFunction<typeof addPog>).mockImplementation(mockAddPog);
 
@@ -73,7 +79,7 @@ describe('Admin', () => {
     expect(screen.queryByPlaceholderText('Enter Pog Name')).not.toBeInTheDocument();
   });
 
-  test('deletes a pog', async () => {
+  it('should delete a pog', async () => {
     const mockDeletePog = jest.fn((id) => Promise.resolve());
     (deletePog as jest.MockedFunction<typeof deletePog>).mockImplementation(mockDeletePog);
 

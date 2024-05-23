@@ -3,6 +3,15 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import Signup from '@/app/signup/page';
 import { signup } from '@/utils/createUser';
+import '@testing-library/jest-dom';
+
+window.alert = jest.fn();
+
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn().mockReturnValue({
+    push: jest.fn(),
+  }),
+}));
 
 // Mock external dependencies
 jest.mock('@/utils/createUser', () => ({
@@ -56,7 +65,7 @@ describe('Signup Component', () => {
   });
 
   test('submits form and redirects to login page on success', async () => {
-    const { getByPlaceholderText, getByText } = render(<Signup />);
+    const { getByPlaceholderText, getByText, getByRole } = render(<Signup />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
 
@@ -69,10 +78,10 @@ describe('Signup Component', () => {
     const lastNameInput = getByPlaceholderText('Last Name');
     fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
 
-    const positionSelect = getByPlaceholderText('Position');
+    const positionSelect = getByRole('position');
     fireEvent.change(positionSelect, { target: { value: 'Admin' } });
 
-    const submitButton = getByText('Sign Up');
+    const submitButton = getByRole('signUpButton');
     fireEvent.click(submitButton);
 
     await waitFor(() => expect(signup).toHaveBeenCalled());
@@ -80,7 +89,7 @@ describe('Signup Component', () => {
   });
 
   test('handles signup failure', async () => {
-    const { getByPlaceholderText, getByText } = render(<Signup />);
+    const { getByPlaceholderText, getByText, getByRole } = render(<Signup />);
     const emailInput = getByPlaceholderText('Email');
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
 
@@ -93,10 +102,10 @@ describe('Signup Component', () => {
     const lastNameInput = getByPlaceholderText('Last Name');
     fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
 
-    const positionSelect = getByPlaceholderText('Position');
+    const positionSelect = getByRole('position');
     fireEvent.change(positionSelect, { target: { value: 'Admin' } });
 
-    const submitButton = getByText('Sign Up');
+    const submitButton = getByRole('signUpButton');
     fireEvent.click(submitButton);
 
     await waitFor(() => expect(signup).toHaveBeenCalled());
