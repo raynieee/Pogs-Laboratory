@@ -67,7 +67,7 @@ export default function Login() {
           />
         </div>
         {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
-        <button type="submit" className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600 active:bg-blue-700">
+        <button type="submit" role="loginButton" className="text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600 active:bg-blue-700">
           Login
         </button>
         <Link href="/signup" className="text-blue-600 py-4">

@@ -33,17 +33,21 @@ export default function Home() {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setUserId(window.localStorage.getItem("userId"));
+      const storedUserId = window.localStorage.getItem("userId");
+      console.log(storedUserId);
+      if (!storedUserId) {
+        router.push("/login");
+      } else {
+        setUserId(storedUserId);
+      }
     }
+    fetchData();
+  }, [userId]);
 
-    if (userId === null) {
-      router.push('/login');
-    }
-
-    async function fetchData() {
-      if (!userId) return;
-
-      try {
+  const fetchData = async () => {
+    try {
+      if (userId) {
+        console.log(`Fetching user profile for user ID: ${userId}`);
         const userProfile = await getUserProfile(Number(userId));
         const getPogs = await fetchAllPogs();
 
@@ -80,12 +84,11 @@ export default function Home() {
         setName(userProfile.name);
         setEWallet(userProfile.eWallet);
         setPogUpdates(pogsWithPercentages);
-      } catch (error) {
-        console.error("Error fetching data:", error);
       }
+    } catch (error) {
+      console.error("Error fetching data:", error);
     }
-    fetchData();
-  }, [userId]);
+  };
 
   const handleBuyPogs = async (pogId: number) => {
     try {

@@ -64,8 +64,6 @@ export default function Admin() {
         newData.color
       );
 
-      console.log("response", response);
-
       // Clear the form after submission
       setPogName("");
       setPogTickerSymbol("");
@@ -74,7 +72,7 @@ export default function Admin() {
       setShowForm(false); // Hide the form after submission
       alert("Added pog successfully.");
     } catch (error) {
-      console.error(error);
+      console.log("Error adding pog.");
     }
   };
 
@@ -107,14 +105,20 @@ export default function Admin() {
       setShowForm(false); // Hide the form after submission
       alert("Edited pog successfully.");
     } catch (error) {
-      console.error(error);
+      console.log("Error updating pog:");
     }
   };
+
   // Function to handle deletion of a row
   const handleDelete = async (id: number) => {
-    await deletePog(id);
-    setTableData(tableData.filter((_, index) => index !== id));
-    alert("Pog deleted successfully.");
+    try {
+      await deletePog(id);
+      const updatedTableData = tableData.filter((pog) => pog.id !== id);
+      setTableData(updatedTableData);
+      alert("Pog deleted successfully.");
+    } catch (error) {
+      console.log("Error deleting pog:");
+    }
   };
 
   const handleRandomPriceChange = async () => {
@@ -122,7 +126,7 @@ export default function Admin() {
       await triggerPriceRandomization();
       alert(`Pog prices randomized successfully.`);
     } catch {
-      console.error("Error");
+      console.log("Error randomizing prices.");
     }
   };
 
@@ -174,6 +178,7 @@ export default function Admin() {
             <button
               type="submit"
               className="text-white font-bold w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
+              onClick={() => window.location.reload()}
             >
               Submit
             </button>
@@ -181,7 +186,7 @@ export default function Admin() {
         )}
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-2 px-4 rounded"
-          onClick={() => handleRandomPriceChange()}
+          onClick={() => { handleRandomPriceChange(), window.location.reload() }}
         >
           Randomize Prices
         </button>
@@ -264,6 +269,7 @@ export default function Admin() {
                       <button
                         type="submit"
                         className="font-bold text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
+                        onClick={() => window.location.reload()}
                       >
                         Save Changes
                       </button>
@@ -272,7 +278,7 @@ export default function Admin() {
                   <br />
                   <button
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-1 px-5 rounded"
-                    onClick={() => handleDelete(data.id)}
+                    onClick={() => {handleDelete(data.id), window.location.reload()}}
                   >
                     Delete
                   </button>
