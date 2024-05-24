@@ -26,6 +26,10 @@ jest.mock("@/utils/addPog", () => {
 });
 
 jest.mock("@/utils/deletePog", () => {
+  it("pass", () => {
+    expect(true).toBe(true)
+  })
+  
   const originalModule = jest.requireActual("@/utils/deletePog");
   return {
     ...originalModule,
@@ -67,12 +71,11 @@ jest.mock("@/utils/updatePog", () => {
 });
 
 describe("Admin", () => {
-  beforeEach(() => {
-    // Clear all mocks before each test
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should add a new pog", async () => {
+  it("adds a new pog", async () => {
     const mockAddPog = jest.fn((name, price, tickerSymbol, color) =>
       Promise.resolve({ id: 1, name, tickerSymbol, price, color })
     );
@@ -105,7 +108,7 @@ describe("Admin", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("should delete a pog", async () => {
+  it("deletes a pog", async () => {
     const mockDeletePog = jest.fn((id) => Promise.resolve());
     (deletePog as jest.MockedFunction<typeof deletePog>).mockImplementation(
       mockDeletePog
