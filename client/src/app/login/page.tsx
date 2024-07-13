@@ -81,7 +81,7 @@ export default function Login() {
         </button>
         <Link href="/signup" className="text-blue-600 py-4">
           <button className="text-blue-500 py-1 cursor-pointer hover:text-blue-800">
-            Don't have an account yet?
+            Don`&apos;`t have an account yet?
           </button>
         </Link>
       </form>

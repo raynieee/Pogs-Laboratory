@@ -15,18 +15,16 @@ interface Pog {
   color: string;
 }
 
-// separate form to create pogs, the option to delete the pogs, the option to edit the pog, price randomizer button
-// ikaw input sng initial price of pog, prev price of initial pog is zero, then for the edit: everything except the price
 export default function Admin() {
   const [pogId, setPogId] = useState<number | null>(null);
   const [pogName, setPogName] = useState("");
   const [pogTickerSymbol, setPogTickerSymbol] = useState("");
   const [pogPrice, setPogPrice] = useState("");
   const [pogColor, setPogColor] = useState("");
-  const [showForm, setShowForm] = useState(false); // State to control form visibility
-  const [showEditForm, setShowEditForm] = useState(false); // State to control edit form visibility
-  const [tableData, setTableData] = useState<Pog[]>([]); // State to hold table data
-  const userPosition = localStorage.getItem("position");
+  const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [tableData, setTableData] = useState<Pog[]>([]);
+  const [userPosition, setUserPosition] = useState<string | null>(null);
 
   const fetchPogs = async () => {
     const response = await fetchAllPogs();
@@ -41,14 +39,18 @@ export default function Admin() {
         router.push("/home");
       }
     };
-    isAdmin();
-    fetchPogs();
-  }, []);
+
+    if (typeof window !== 'undefined') {
+      const position = localStorage.getItem("position");
+      setUserPosition(position);
+      isAdmin();
+      fetchPogs();
+    }
+  }, [userPosition]);
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
 
-    // Create a new object with the form data
     const newData = {
       name: pogName,
       tickerSymbol: pogTickerSymbol,
@@ -64,13 +66,13 @@ export default function Admin() {
         newData.color
       );
 
-      // Clear the form after submission
       setPogName("");
       setPogTickerSymbol("");
       setPogPrice("");
       setPogColor("");
-      setShowForm(false); // Hide the form after submission
+      setShowForm(false);
       alert("Added pog successfully.");
+      fetchPogs();
     } catch (error) {
       console.log("Error adding pog.");
     }
@@ -79,7 +81,6 @@ export default function Admin() {
   const handleEdit = async (e: any) => {
     e.preventDefault();
 
-    // Create a new object with the form data
     const newData = {
       id: pogId,
       name: pogName,
@@ -97,19 +98,18 @@ export default function Admin() {
         newData.color
       );
 
-      // Clear the form after submission
       setPogName("");
       setPogTickerSymbol("");
       setPogPrice("");
       setPogColor("");
-      setShowForm(false); // Hide the form after submission
+      setShowForm(false);
       alert("Edited pog successfully.");
+      fetchPogs();
     } catch (error) {
       console.log("Error updating pog:");
     }
   };
 
-  // Function to handle deletion of a row
   const handleDelete = async (id: number) => {
     try {
       await deletePog(id);
@@ -125,6 +125,7 @@ export default function Admin() {
     try {
       await triggerPriceRandomization();
       alert(`Pog prices randomized successfully.`);
+      fetchPogs();
     } catch {
       console.log("Error randomizing prices.");
     }
@@ -178,7 +179,6 @@ export default function Admin() {
             <button
               type="submit"
               className="text-white font-bold w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
-              onClick={() => window.location.reload()}
             >
               Submit
             </button>
@@ -186,7 +186,7 @@ export default function Admin() {
         )}
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-2 px-4 rounded"
-          onClick={() => { handleRandomPriceChange(), window.location.reload() }}
+          onClick={handleRandomPriceChange}
         >
           Randomize Prices
         </button>
@@ -222,6 +222,10 @@ export default function Admin() {
                     onClick={() => {
                       setShowEditForm(!showEditForm);
                       setPogId(data.id);
+                      setPogName(data.name);
+                      setPogTickerSymbol(data.tickerSymbol);
+                      setPogPrice(String(data.price));
+                      setPogColor(data.color);
                     }}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
                   >
@@ -268,17 +272,16 @@ export default function Admin() {
                       </div>
                       <button
                         type="submit"
-                        className="font-bold text-white w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
-                        onClick={() => window.location.reload()}
+                        className="text-white font-bold w-full py-2 mt-6 bg-blue-500 rounded-md hover:bg-blue-600"
                       >
-                        Save Changes
+                        Submit
                       </button>
                     </form>
                   )}
-                  <br />
+
                   <button
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold m-1 py-1 px-5 rounded"
-                    onClick={() => {handleDelete(data.id), window.location.reload()}}
+                    onClick={() => handleDelete(data.id)}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded"
                   >
                     Delete
                   </button>
