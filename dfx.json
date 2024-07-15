@@ -1,0 +1,45 @@
+{
+    "version": 1,
+    "dfx": "0.20.1",
+    "canisters": {
+      "server": {
+        "type": "custom",
+        "main": "server/src/index.ts",
+        "candid": "server/src/index.did",
+        "candid_gen": "automatic",
+        "build": "npx azle server",
+        "wasm": ".azle/server/server.wasm",
+        "gzip": true,
+        "assets": [["server/prisma/migrations", "migrations"]],
+        "metadata": [
+          {
+            "name": "candid:service",
+            "path": "server/src/index.did"
+          },
+          {
+            "name": "cdk:name",
+            "content": "myServer"
+          }
+        ]
+      },
+      "client": {
+        "type": "assets",
+        "dependencies": ["server"],
+        "client": {
+          "entrypoint": "client/build/index.html"
+        },
+        "source": ["client/build"]
+      },
+      "internet-identity": {
+        "type": "custom",
+        "candid": "https://github.com/dfinity/internet-identity/releases/download/release-2023-09-08/internet_identity.did",
+        "wasm": "https://github.com/dfinity/internet-identity/releases/download/release-2023-09-08/internet_identity_dev.wasm.gz",
+        "remote": {
+          "id": {
+            "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+          }
+        }
+      }
+    }
+  }
+  
